@@ -1,15 +1,34 @@
-function ChatInput() {
+import { useState } from "react";
+
+function ChatInput({ onSendMessage }) {
+
+  const [input, setInput] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!input.trim()) return;
+
+    onSendMessage(input);
+
+    setInput("");
+  };
+
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
+
       <input
         type="text"
         placeholder="Ask EduAI anything..."
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
       />
 
-      <button>
+      <button type="submit">
         Send
       </button>
-    </div>
+
+    </form>
   );
 }
 
