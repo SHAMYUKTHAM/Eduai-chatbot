@@ -6,7 +6,6 @@ import ChatMessage from "./components/ChatMessage";
 import ChatInput from "./components/ChatInput";
 
 function App() {
-
   const [messages, setMessages] = useState([
     {
       sender: "bot",
@@ -15,10 +14,8 @@ function App() {
   ]);
 
   const handleSendMessage = (message) => {
-
     if (!message.trim()) return;
 
-    // Add user's message
     setMessages((previousMessages) => [
       ...previousMessages,
       {
@@ -27,9 +24,7 @@ function App() {
       }
     ]);
 
-    // Temporary EduAI response
     setTimeout(() => {
-
       setMessages((previousMessages) => [
         ...previousMessages,
         {
@@ -38,19 +33,16 @@ function App() {
             "That's a great question! 🤖 I'm EduAI and I'm here to help you learn."
         }
       ]);
-
     }, 500);
   };
 
   return (
     <div className="app">
-
       <div className="chat-container">
 
         <ChatHeader />
 
         <main className="chat-window">
-
           {messages.map((msg, index) => (
             <ChatMessage
               key={index}
@@ -58,13 +50,11 @@ function App() {
               message={msg.message}
             />
           ))}
-
         </main>
 
         <ChatInput onSendMessage={handleSendMessage} />
 
       </div>
-
     </div>
   );
 }

@@ -1,11 +1,13 @@
 function ChatMessage({ message, sender }) {
-  return (
-    <div>
-      <strong>
-        {sender === "bot" ? "🤖 EduAI" : "👤 You"}
-      </strong>
+  const isBot = sender === "bot";
 
-      <p>{message}</p>
+  return (
+    <div className={`message-row ${isBot ? "bot-row" : "user-row"}`}>
+      <div className={`message-bubble ${isBot ? "bot-message" : "user-message"}`}>
+        
+
+        <p>{message}</p>
+      </div>
     </div>
   );
 }

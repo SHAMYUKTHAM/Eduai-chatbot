@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 function ChatInput({ onSendMessage }) {
-
   const [input, setInput] = useState("");
 
   const handleSubmit = (e) => {
@@ -15,8 +14,7 @@ function ChatInput({ onSendMessage }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-
+    <form className="chat-input-area" onSubmit={handleSubmit}>
       <input
         type="text"
         placeholder="Ask EduAI anything..."
@@ -27,7 +25,6 @@ function ChatInput({ onSendMessage }) {
       <button type="submit">
         Send
       </button>
-
     </form>
   );
 }
