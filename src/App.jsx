@@ -13,9 +13,12 @@ function App() {
     }
   ]);
 
-  const handleSendMessage = (message) => {
-    if (!message.trim()) return;
+  const [isLoading, setIsLoading] = useState(false);
 
+  const handleSendMessage = async (message) => {
+    if (!message.trim() || isLoading) return;
+
+    // Add user's message to the chat
     setMessages((previousMessages) => [
       ...previousMessages,
       {
@@ -24,16 +27,47 @@ function App() {
       }
     ]);
 
-    setTimeout(() => {
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:8080/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: message
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Backend request failed");
+      }
+
+      const data = await response.json();
+
+      // Add backend response to the chat
+      setMessages((previousMessages) => [
+        ...previousMessages,
+        {
+          sender: "bot",
+          message: data.response
+        }
+      ]);
+    } catch (error) {
+      console.error("Error connecting to backend:", error);
+
       setMessages((previousMessages) => [
         ...previousMessages,
         {
           sender: "bot",
           message:
-            "That's a great question! 🤖 I'm EduAI and I'm here to help you learn."
+            "Sorry, I couldn't connect to the EduAI server. Please try again."
         }
       ]);
-    }, 500);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -50,6 +84,13 @@ function App() {
               message={msg.message}
             />
           ))}
+
+          {isLoading && (
+            <ChatMessage
+              sender="bot"
+              message="EduAI is thinking... 🤔"
+            />
+          )}
         </main>
 
         <ChatInput onSendMessage={handleSendMessage} />
