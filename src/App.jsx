@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 import ChatHeader from "./components/ChatHeader";
@@ -14,6 +14,16 @@ function App() {
   ]);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  // Reference to the bottom of the chat
+  const messagesEndRef = useRef(null);
+
+  // Automatically scroll to the latest message
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth"
+    });
+  }, [messages, isLoading]);
 
   const handleSendMessage = async (message) => {
     if (!message.trim() || isLoading) return;
@@ -46,7 +56,7 @@ function App() {
 
       const data = await response.json();
 
-      // Add backend response to the chat
+      // Add Gemini response to the chat
       setMessages((previousMessages) => [
         ...previousMessages,
         {
@@ -91,6 +101,9 @@ function App() {
               message="EduAI is thinking... 🤔"
             />
           )}
+
+          {/* Invisible element used for auto-scrolling */}
+          <div ref={messagesEndRef} />
         </main>
 
         <ChatInput onSendMessage={handleSendMessage} />
